@@ -35,15 +35,12 @@ local enabled = true
 local function isBall(obj)
     if not obj:IsA("BasePart") then return false end
 
-    -- путь мяча всегда содержит Interactive/Balls
     local path = obj:GetFullName():lower()
     if not path:find("interactive") then return false end
     if not path:find("balls") then return false end
 
-    -- имя мяча
     if obj.Name ~= "MPS" then return false end
 
-    -- размер мяча
     local s = obj.Size
     if s.X == 2.5 and s.Y == 2.5 and s.Z == 2.5 then
         return true
@@ -87,7 +84,7 @@ local function updateVisuals()
     end
 end
 
--- регистрация касания
+-- 🔥 УЛУЧШЕННАЯ РЕГИСТРАЦИЯ КАСАНИЯ (ТОЛЬКО ДЛЯ LOCALPLAYER)
 local function checkTouch()
     if not enabled then return end
 
@@ -99,11 +96,16 @@ local function checkTouch()
 
     for ball, visual in pairs(visuals) do
         if ball and ball.Parent and visual then
+            
             local dist = (root.Position - ball.Position).Magnitude
             local radius = visual.Size.X / 2
 
             if dist <= radius then
                 print("TOUCH:", ball.Name)
+
+                -- 🔥 ТУТ МОЖНО ДОБАВИТЬ ЛЮБОЕ ДЕЙСТВИЕ:
+                -- например автокик:
+                -- ball.Velocity = (root.CFrame.LookVector * 60)
             end
         end
     end
